@@ -1,0 +1,10 @@
+
+# Ignore temporary files
+venv/
+.venv311/
+notebook/mlruns/
+notebook/reports/
+notebook/results/
+notebook/models_chpt/
+fever output.png
+
