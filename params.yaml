@@ -1,9 +1,11 @@
 prepare:
   rawdata_file_path: C:/Users/DELL/Desktop/my_ml_project/notebook/fever.csv #notebook/fever.csv
-  test_size: 0.2
-  val_size: 0.1
-  random_state: 42
   target_column: "Fever_Severity_code"
+preprocess:
+  test_size: 0.2
+  al_size: 0.1
+  random_state: 42
+  #target_column: "Fever_Severity_code"
   numerical_cols:
     - "Temperature"
     - "Age"

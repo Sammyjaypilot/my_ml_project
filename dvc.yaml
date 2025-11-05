@@ -1,0 +1,12 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+      - src/preprocess.py
+      - notebook/fever.csv
+    params:
+      - preprocess.test_size
+      - preprocess.random_state
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv

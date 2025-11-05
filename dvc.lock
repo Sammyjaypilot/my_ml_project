@@ -1,0 +1,26 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: notebook/fever.csv
+      hash: md5
+      md5: d2dde0d2fd0ae6a76fad812f5c365330
+      size: 110325
+    - path: src/preprocess.py
+      hash: md5
+      md5: a41aa23b20592e8a4f85dda013643907
+      size: 591
+    params:
+      params.yaml:
+        preprocess.random_state: 42
+        preprocess.test_size: 0.2
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: c3a6f599d457f1dba5ce8d5ea1898a47
+      size: 22068
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b3e5c8dfff7cee8efb52d29c60950b42
+      size: 87554
