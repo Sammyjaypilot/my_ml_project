@@ -1,12 +1,23 @@
 stages:
   preprocess:
-    cmd: python src/preprocess.py
+    cmd: ^
+  train:
+    cmd: python src/ml/train.py
     deps:
-      - src/preprocess.py
-      - notebook/fever.csv
+    - src/ml/train.py
+    - C:/Users/DELL/Desktop/my_ml_project/data/processed/train.csv
+    - C:/Users/DELL/Desktop/my_ml_project/data/processed/test.csv
     params:
-      - preprocess.test_size
-      - preprocess.random_state
+    - C:/Users/DELL/Desktop/my_ml_project/notebook/params.yaml:
+      - model.model_type
+      - model.random_state
+      - training.random_state
+
+    metrics:
+    - C:/Users/DELL/Desktop/my_ml_project/metrics/metrics.json:
+        cache: false
+
     outs:
-      - data/processed/train.csv
-      - data/processed/test.csv
+    - C:/Users/DELL/Desktop/my_ml_project/models/fever_severity_model.pkl
+
+
