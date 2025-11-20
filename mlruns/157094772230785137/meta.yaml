@@ -1,0 +1,6 @@
+artifact_location: mlflow-artifacts:/157094772230785137
+creation_time: 1763463537419
+experiment_id: '157094772230785137'
+last_update_time: 1763463537419
+lifecycle_stage: active
+name: FeverSeverity_Prediction

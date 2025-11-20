@@ -1,23 +1,36 @@
 stages:
   preprocess:
-    cmd: ^
-  train:
-    cmd: python src/ml/train.py
+    cmd: python src/ml/data_processor.py
     deps:
-    - src/ml/train.py
-    - C:/Users/DELL/Desktop/my_ml_project/data/processed/train.csv
-    - C:/Users/DELL/Desktop/my_ml_project/data/processed/test.csv
-    params:
-    - C:/Users/DELL/Desktop/my_ml_project/notebook/params.yaml:
-      - model.model_type
-      - model.random_state
-      - training.random_state
+      - src/ml/data_processor.py
+      - C:/Users/DELL/Desktop/my_ml_project/notebook/fever.csv
 
-    metrics:
-    - C:/Users/DELL/Desktop/my_ml_project/metrics/metrics.json:
-        cache: false
+    params:
+      - C:/Users/DELL/Desktop/my_ml_project/notebook/params.yaml:
+          - preprocess.test_size
+          - preprocess.val_size
+          - preprocess.random_state
 
     outs:
-    - C:/Users/DELL/Desktop/my_ml_project/models/fever_severity_model.pkl
+      - C:/Users/DELL/Desktop/my_ml_project/data/processed/train.csv
+      - C:/Users/DELL/Desktop/my_ml_project/data/processed/test.csv
+
+  train:
+    cmd: python -m src.ml.train
+    deps:
+      - src/ml/train.py
+      - C:/Users/DELL/Desktop/my_ml_project/data/processed/train.csv
+      - C:/Users/DELL/Desktop/my_ml_project/data/processed/test.csv
+    params:
+      - C:/Users/DELL/Desktop/my_ml_project/notebook/params.yaml:
+          - model.random_state
+          - model.model_type
+
+    metrics:
+      - C:/Users/DELL/Desktop/my_ml_project/metrics/metrics.json:
+          cache: false
+
+    outs:
+      - C:/Users/DELL/Desktop/my_ml_project/models/fever_severity_model.pkl
 
 

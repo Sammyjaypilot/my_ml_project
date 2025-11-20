@@ -1,6 +1,6 @@
 # hyper-parameter tuning
 """
-Cross Validation Module for Hypertension Prediction
+Cross Validation Module for Fever Severity Prediction
 Provides comprehensive cross-validation strategies and model evaluation
 """
 

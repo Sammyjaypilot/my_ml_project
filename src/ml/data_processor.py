@@ -12,12 +12,12 @@ from pathlib import Path
 
 
 
-def load_params(params_path="params.yaml"):
+def load_params( param_file_path = "C:/Users/DELL/Desktop/my_ml_project/notebook/params.yaml"):
     """Load parameters from params.yaml."""
-    if not os.path.exists(params_path):
-        raise FileNotFoundError(f"{params_path} not found. Please check your project root.")
+    if not os.path.exists(param_file_path):
+        raise FileNotFoundError(f"{param_file_path} not found. Please check your project root.")
     
-    with open(params_path, "r") as f:
+    with open(param_file_path, "r") as f:
         params = yaml.safe_load(f)
     
     return params
@@ -64,6 +64,20 @@ class DataProcessor:
         Returns:
             tuple: (X_train, X_val, X_test, y_train, y_val, y_test)
         """
+
+        if self.target_column not in df_fever.columns:
+            # --- Automatically encode Fever_Severity to numeric ---
+            if 'Fever_Severity' in df_fever.columns and 'Fever_Severity_code' not in df_fever.columns:
+                from sklearn.preprocessing import LabelEncoder
+                le = LabelEncoder()
+                df_fever['Fever_Severity_code'] = le.fit_transform(df_fever['Fever_Severity'])
+                print("✅ Converted 'Fever_Severity' → 'Fever_Severity_code'")
+            elif 'Fever_Severity_code' in df_fever.columns:
+                print("ℹ️  'Fever_Severity_code' already exists, skipping encoding.")
+            else:
+                raise KeyError("Neither 'Fever_Severity' nor 'Fever_Severity_code' column found in dataset.")
+
+
         X = df_fever.drop(columns=[self.target_column])
         y = df_fever[self.target_column]
 
@@ -193,7 +207,7 @@ class DataProcessor:
         Create preprocessing pipeline using parameters from params.yaml
         """
         current_file = Path(__file__)
-        params_file_path = current_file.parent.parent.parent / 'params.yaml'
+        params_file_path = current_file.parent.parent.parent / 'notebook' / 'params.yaml'
         print(f"DEBUG: Attempting to open file at: {params_file_path}") # Verify path one last time
 
         # Load default parameters from params.yaml if not provided
@@ -270,3 +284,55 @@ class DataProcessor:
                 feature_names.extend(encoded_features)
 
         return feature_names
+    
+
+if __name__ == "__main__":
+
+    # --- Helper to load params.yaml ---
+    project_root = Path("C:/Users/DELL/Desktop/my_ml_project")
+    params_path = project_root / "notebook" / "params.yaml"
+
+    # Load params.yaml if it exists
+    if params_path.exists():
+        with open(params_path, "r") as f:
+            params = yaml.safe_load(f)
+        print(f"✅ Loaded params.yaml from: {params_path}")
+    else:
+        print(f"⚠️ params.yaml not found at {params_path}. Using defaults.")
+        params = {}
+
+    
+    repo_root = Path("C:/Users/DELL/Desktop/my_ml_project")
+
+    raw_path = params.get("prepare", {}).get("rawdata_file_path", str(repo_root / "notebook" / "fever.csv"))
+    target_col = params.get("prepare", {}).get("target_column", "Fever_Severity_code")
+    test_size = params.get("preprocess", {}).get("test_size", 0.2)
+    val_size = params.get("preprocess", {}).get("val_size", 0.1)
+    random_state = params.get("preprocess", {}).get("random_state", 42)
+
+    print(f"Loading raw data from: {raw_path}")
+    df = pd.read_csv(raw_path)
+
+    # --- Instantiate DataProcessor ---
+    dp = DataProcessor(
+        target_column=target_col,
+        test_size=test_size,
+        val_size=val_size,
+        random_state=random_state
+    )
+
+    # --- Build preprocessor ---
+    try:
+        dp.create_preprocessor()
+    except Exception as e:
+        print(f"⚠️ create_preprocessor() raised an exception: {e}. Continuing with defaults.")
+
+    # --- Save splits and generate metrics ---
+    save_dir = repo_root / "data" / "processed"
+    dp.split_data(df, save_path=str(save_dir), generate_metrics=True)
+
+    metrics_path = repo_root / "metrics" / "metrics.json"
+
+    print("✅ Preprocessing completed.")
+    print(f"Processed data files saved to: {save_dir}")
+    print(f"Metrics saved to: {metrics_path}")

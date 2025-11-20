@@ -1,26 +1,55 @@
 schema: '2.0'
 stages:
   preprocess:
-    cmd: python src/preprocess.py
+    cmd: python src/ml/data_processor.py
     deps:
-    - path: notebook/fever.csv
+    - path: notebook\fever.csv
       hash: md5
       md5: d2dde0d2fd0ae6a76fad812f5c365330
       size: 110325
-    - path: src/preprocess.py
+    - path: src/ml/data_processor.py
       hash: md5
-      md5: a41aa23b20592e8a4f85dda013643907
-      size: 591
+      md5: 5bf121e7a3ab52bd02ad1e3e9504cf79
+      size: 14931
     params:
-      params.yaml:
+      notebook/params.yaml:
         preprocess.random_state: 42
         preprocess.test_size: 0.2
+        preprocess.val_size: 0.1
     outs:
-    - path: data/processed/test.csv
+    - path: data\processed\test.csv
       hash: md5
-      md5: c3a6f599d457f1dba5ce8d5ea1898a47
-      size: 22068
-    - path: data/processed/train.csv
+      md5: 9d1f8648650f6bc18fa1408f2abbc647
+      size: 22605
+    - path: data\processed\train.csv
       hash: md5
-      md5: b3e5c8dfff7cee8efb52d29c60950b42
-      size: 87554
+      md5: bd123a434dcf6cd4c3782edefadceb70
+      size: 77827
+  train:
+    cmd: python -m src.ml.train
+    deps:
+    - path: data\processed\test.csv
+      hash: md5
+      md5: 9d1f8648650f6bc18fa1408f2abbc647
+      size: 22605
+    - path: data\processed\train.csv
+      hash: md5
+      md5: bd123a434dcf6cd4c3782edefadceb70
+      size: 77827
+    - path: src/ml/train.py
+      hash: md5
+      md5: 8e045c42da36ee2b2155b02b83b07e24
+      size: 14154
+    params:
+      notebook/params.yaml:
+        model.model_type: random_forest
+        model.random_state: 42
+    outs:
+    - path: metrics\metrics.json
+      hash: md5
+      md5: 1a6514da400224d297279710ef61dbaa
+      size: 1080
+    - path: models\fever_severity_model.pkl
+      hash: md5
+      md5: cd0c443c626d66813fe915007efe55e8
+      size: 774195

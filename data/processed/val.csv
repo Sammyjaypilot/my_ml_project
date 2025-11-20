@@ -1,0 +1,101 @@
+Temperature,Fever_Severity,Age,Gender,BMI,Headache,Body_Ache,Fatigue,Chronic_Conditions,Allergies,Smoking_History,Alcohol_Consumption,Humidity,AQI,Physical_Activity,Diet_Type,Heart_Rate,Blood_Pressure,Previous_Medication,Recommended_Medication,Fever_Severity_code
+38.2,High Fever,79,Male,33.7,Yes,Yes,Yes,No,No,No,No,64.8,307,Sedentary,Vegetarian,94,High,Aspirin,Ibuprofen,0
+39.6,High Fever,49,Female,27.0,No,No,No,No,Yes,Yes,Yes,33.8,459,Moderate,Vegan,69,High,Ibuprofen,Ibuprofen,0
+37.4,Mild Fever,13,Male,18.8,Yes,No,Yes,Yes,No,Yes,No,72.1,268,Sedentary,Vegetarian,78,Normal,Paracetamol,Paracetamol,1
+40.0,High Fever,74,Female,19.6,Yes,Yes,Yes,Yes,No,Yes,Yes,61.1,28,Moderate,Vegetarian,98,Normal,Aspirin,Ibuprofen,0
+38.7,High Fever,27,Female,21.6,No,No,Yes,No,Yes,Yes,Yes,79.9,420,Moderate,Non-Vegetarian,96,High,,Ibuprofen,0
+39.7,High Fever,64,Male,26.4,No,No,Yes,No,No,Yes,No,33.4,24,Moderate,Non-Vegetarian,87,Normal,Paracetamol,Ibuprofen,0
+38.2,High Fever,91,Male,30.1,Yes,Yes,Yes,Yes,Yes,Yes,Yes,83.9,349,Moderate,Vegetarian,99,High,Paracetamol,Ibuprofen,0
+39.2,High Fever,40,Male,25.7,Yes,No,Yes,No,No,Yes,Yes,60.5,77,Active,Non-Vegetarian,97,Low,Ibuprofen,Ibuprofen,0
+38.1,High Fever,6,Female,20.4,Yes,Yes,No,No,No,No,No,81.9,171,Active,Vegan,93,Low,,Ibuprofen,0
+37.6,Mild Fever,26,Female,32.1,Yes,Yes,No,No,Yes,Yes,Yes,56.3,155,Sedentary,Vegetarian,97,High,,Paracetamol,1
+37.0,Normal,98,Female,26.5,Yes,No,Yes,Yes,Yes,Yes,No,67.8,140,Sedentary,Vegan,67,High,Paracetamol,Ibuprofen,2
+38.8,High Fever,82,Male,19.8,Yes,No,Yes,Yes,Yes,No,No,75.4,74,Moderate,Non-Vegetarian,92,High,Ibuprofen,Ibuprofen,0
+39.7,High Fever,53,Female,33.8,No,Yes,No,No,Yes,No,Yes,88.1,127,Active,Vegan,70,Low,Aspirin,Ibuprofen,0
+38.5,High Fever,22,Male,29.3,Yes,No,No,Yes,Yes,Yes,No,51.6,102,Sedentary,Non-Vegetarian,65,High,,Ibuprofen,0
+38.7,High Fever,58,Female,23.7,Yes,No,No,No,Yes,No,No,86.2,298,Sedentary,Vegan,79,High,Paracetamol,Ibuprofen,0
+36.5,Normal,26,Female,25.0,Yes,No,No,Yes,Yes,Yes,No,42.2,48,Active,Vegetarian,82,Normal,Paracetamol,Ibuprofen,2
+37.1,Normal,90,Male,18.7,No,Yes,No,Yes,No,Yes,No,77.7,52,Sedentary,Vegetarian,65,Low,Ibuprofen,Ibuprofen,2
+39.7,High Fever,39,Male,22.1,No,Yes,No,No,Yes,No,No,76.2,44,Moderate,Vegetarian,70,Normal,Ibuprofen,Ibuprofen,0
+39.6,High Fever,31,Female,27.5,No,Yes,No,Yes,Yes,Yes,No,37.5,53,Moderate,Non-Vegetarian,65,High,Aspirin,Ibuprofen,0
+39.1,High Fever,58,Female,28.7,Yes,No,Yes,No,Yes,No,Yes,37.3,5,Sedentary,Vegan,94,Low,Ibuprofen,Ibuprofen,0
+36.5,Normal,96,Female,24.8,Yes,Yes,No,No,Yes,Yes,No,76.6,489,Active,Non-Vegetarian,84,Normal,Ibuprofen,Ibuprofen,2
+38.1,High Fever,36,Male,30.5,No,No,No,Yes,Yes,No,Yes,56.0,335,Moderate,Non-Vegetarian,84,Normal,Paracetamol,Ibuprofen,0
+39.4,High Fever,97,Female,30.4,No,No,Yes,Yes,Yes,No,No,30.5,65,Sedentary,Non-Vegetarian,76,High,Paracetamol,Ibuprofen,0
+36.4,Normal,81,Female,32.1,Yes,No,Yes,Yes,Yes,Yes,No,65.1,153,Active,Vegetarian,74,High,Ibuprofen,Ibuprofen,2
+39.3,High Fever,17,Female,25.6,No,No,No,Yes,Yes,No,Yes,87.9,262,Moderate,Vegan,79,Low,Ibuprofen,Ibuprofen,0
+38.1,High Fever,7,Male,29.6,No,Yes,No,Yes,No,No,No,65.2,394,Sedentary,Non-Vegetarian,87,Low,,Ibuprofen,0
+37.3,Mild Fever,20,Female,27.7,No,No,Yes,No,Yes,Yes,No,70.9,414,Moderate,Vegetarian,75,Low,Ibuprofen,Paracetamol,1
+36.7,Normal,32,Male,19.4,No,No,No,No,No,No,Yes,38.3,217,Moderate,Non-Vegetarian,70,Low,Paracetamol,Ibuprofen,2
+38.4,High Fever,82,Male,18.9,No,No,Yes,No,No,Yes,No,47.2,384,Sedentary,Non-Vegetarian,95,Low,,Ibuprofen,0
+36.4,Normal,30,Female,22.4,Yes,No,No,Yes,Yes,Yes,Yes,58.5,74,Sedentary,Vegetarian,66,Low,Ibuprofen,Ibuprofen,2
+37.5,Mild Fever,37,Female,23.3,No,No,No,Yes,No,No,No,60.4,474,Active,Vegetarian,69,Normal,Aspirin,Paracetamol,1
+39.5,High Fever,17,Male,25.1,Yes,Yes,Yes,No,Yes,Yes,Yes,59.6,161,Moderate,Non-Vegetarian,73,Low,Paracetamol,Ibuprofen,0
+39.8,High Fever,56,Male,21.9,No,Yes,No,Yes,No,Yes,No,78.8,247,Sedentary,Vegan,65,High,Paracetamol,Ibuprofen,0
+39.2,High Fever,40,Male,28.3,Yes,Yes,Yes,Yes,No,No,Yes,57.5,0,Active,Vegetarian,99,High,,Ibuprofen,0
+37.9,Mild Fever,18,Male,23.0,Yes,Yes,Yes,Yes,No,No,Yes,61.4,478,Sedentary,Non-Vegetarian,71,Normal,Ibuprofen,Paracetamol,1
+39.7,High Fever,72,Male,31.8,No,Yes,Yes,No,Yes,No,Yes,72.5,111,Moderate,Non-Vegetarian,93,Low,,Ibuprofen,0
+36.2,Normal,94,Male,18.6,Yes,Yes,Yes,Yes,Yes,Yes,No,56.3,218,Sedentary,Vegan,77,Normal,Ibuprofen,Ibuprofen,2
+39.2,High Fever,8,Male,18.7,Yes,No,No,Yes,Yes,No,Yes,65.7,349,Moderate,Non-Vegetarian,84,Normal,Aspirin,Ibuprofen,0
+37.2,Normal,48,Female,23.5,No,Yes,Yes,Yes,Yes,No,Yes,86.3,104,Active,Vegan,69,Normal,,Ibuprofen,2
+37.3,Mild Fever,29,Male,31.3,No,Yes,No,Yes,Yes,No,No,55.7,465,Sedentary,Vegetarian,63,Normal,Paracetamol,Paracetamol,1
+37.4,Mild Fever,94,Male,18.7,Yes,No,Yes,Yes,No,No,No,88.7,312,Active,Non-Vegetarian,63,Normal,Aspirin,Paracetamol,1
+38.0,Mild Fever,100,Female,19.8,No,No,Yes,Yes,No,Yes,No,57.3,3,Sedentary,Vegan,80,High,,Paracetamol,1
+39.9,High Fever,56,Female,29.2,No,Yes,No,Yes,No,Yes,Yes,63.6,308,Moderate,Vegan,68,High,Aspirin,Ibuprofen,0
+39.3,High Fever,70,Male,25.2,Yes,Yes,No,No,Yes,Yes,Yes,76.6,472,Active,Vegetarian,87,Normal,Ibuprofen,Ibuprofen,0
+39.0,High Fever,98,Male,32.9,Yes,No,No,No,Yes,No,Yes,42.2,65,Active,Vegan,91,High,Ibuprofen,Ibuprofen,0
+38.2,High Fever,38,Male,34.5,No,No,Yes,No,Yes,No,Yes,61.7,457,Moderate,Non-Vegetarian,62,Low,Paracetamol,Ibuprofen,0
+39.5,High Fever,49,Female,24.7,No,No,No,No,Yes,Yes,No,38.0,330,Moderate,Vegan,61,High,Aspirin,Ibuprofen,0
+39.8,High Fever,95,Male,23.1,Yes,No,No,No,Yes,No,No,50.5,181,Sedentary,Vegan,69,High,Aspirin,Ibuprofen,0
+36.6,Normal,25,Female,21.2,No,No,No,Yes,Yes,No,Yes,44.8,388,Active,Non-Vegetarian,63,Normal,Aspirin,Ibuprofen,2
+37.4,Mild Fever,28,Female,19.3,No,Yes,Yes,No,Yes,Yes,Yes,74.9,364,Active,Non-Vegetarian,67,Normal,Ibuprofen,Paracetamol,1
+38.5,High Fever,16,Male,18.9,Yes,No,No,Yes,No,Yes,Yes,35.2,402,Active,Vegetarian,79,Low,Paracetamol,Ibuprofen,0
+37.9,Mild Fever,86,Female,26.1,Yes,No,Yes,No,No,Yes,Yes,41.7,51,Moderate,Non-Vegetarian,99,Low,,Paracetamol,1
+39.2,High Fever,41,Female,29.6,Yes,Yes,Yes,No,No,Yes,No,46.9,481,Active,Non-Vegetarian,87,High,Aspirin,Ibuprofen,0
+36.5,Normal,88,Female,21.7,No,Yes,No,Yes,No,Yes,Yes,79.6,114,Active,Vegan,86,Low,,Ibuprofen,2
+36.7,Normal,94,Male,30.8,Yes,Yes,Yes,Yes,Yes,Yes,Yes,50.5,477,Moderate,Vegan,77,High,Ibuprofen,Ibuprofen,2
+38.2,High Fever,85,Female,34.4,No,No,No,Yes,Yes,Yes,Yes,49.8,64,Sedentary,Vegan,66,Low,Ibuprofen,Ibuprofen,0
+36.4,Normal,82,Female,19.8,No,Yes,Yes,No,Yes,Yes,No,39.9,148,Active,Vegetarian,90,Normal,Paracetamol,Ibuprofen,2
+36.8,Normal,87,Male,34.3,No,No,Yes,No,No,No,No,67.2,137,Active,Vegan,92,High,Ibuprofen,Ibuprofen,2
+39.5,High Fever,58,Male,20.8,Yes,No,Yes,No,Yes,No,Yes,52.2,478,Moderate,Non-Vegetarian,94,Low,Ibuprofen,Ibuprofen,0
+36.3,Normal,35,Male,18.0,Yes,No,No,No,Yes,No,No,73.0,394,Sedentary,Vegetarian,80,Low,Aspirin,Ibuprofen,2
+38.6,High Fever,51,Male,31.4,No,No,No,Yes,Yes,No,Yes,72.7,479,Active,Vegetarian,100,Normal,Ibuprofen,Ibuprofen,0
+37.2,Normal,98,Male,34.5,Yes,Yes,Yes,No,Yes,No,No,82.9,372,Active,Vegan,61,High,Paracetamol,Ibuprofen,2
+36.7,Normal,77,Male,25.2,No,No,Yes,Yes,No,No,Yes,80.7,34,Active,Vegetarian,77,Normal,Ibuprofen,Ibuprofen,2
+37.3,Mild Fever,26,Male,31.5,No,No,No,No,Yes,Yes,No,34.7,416,Active,Non-Vegetarian,87,Normal,Ibuprofen,Paracetamol,1
+39.7,High Fever,83,Female,28.6,Yes,Yes,Yes,Yes,Yes,Yes,Yes,35.6,187,Sedentary,Vegan,98,Normal,Aspirin,Ibuprofen,0
+37.8,Mild Fever,100,Male,27.2,Yes,Yes,No,No,No,No,Yes,76.8,365,Active,Non-Vegetarian,93,Low,Aspirin,Paracetamol,1
+37.9,Mild Fever,1,Female,22.5,Yes,Yes,No,No,Yes,Yes,No,44.9,282,Active,Vegetarian,72,High,,Paracetamol,1
+39.7,High Fever,47,Male,26.0,No,No,No,Yes,No,Yes,Yes,73.1,190,Moderate,Vegan,77,High,Paracetamol,Ibuprofen,0
+38.9,High Fever,18,Male,25.6,Yes,No,Yes,Yes,No,Yes,Yes,56.4,431,Active,Non-Vegetarian,100,Normal,Paracetamol,Ibuprofen,0
+38.9,High Fever,59,Female,31.6,Yes,Yes,No,No,Yes,Yes,Yes,85.8,435,Active,Non-Vegetarian,60,Low,,Ibuprofen,0
+36.4,Normal,46,Male,28.2,Yes,No,Yes,No,No,No,No,48.0,131,Moderate,Non-Vegetarian,66,Normal,Paracetamol,Ibuprofen,2
+38.0,Mild Fever,96,Female,21.7,Yes,No,Yes,No,Yes,Yes,Yes,45.9,125,Sedentary,Vegan,75,High,Aspirin,Paracetamol,1
+38.6,High Fever,92,Male,29.3,No,Yes,No,Yes,No,Yes,No,87.9,256,Active,Non-Vegetarian,88,High,Paracetamol,Ibuprofen,0
+37.4,Mild Fever,32,Female,26.4,Yes,Yes,No,No,No,Yes,No,45.7,31,Sedentary,Vegetarian,71,High,Aspirin,Paracetamol,1
+37.1,Normal,22,Female,18.1,Yes,No,Yes,Yes,No,Yes,No,66.8,438,Sedentary,Non-Vegetarian,94,High,Paracetamol,Ibuprofen,2
+38.4,High Fever,6,Male,19.1,No,No,Yes,Yes,Yes,Yes,No,86.2,338,Active,Vegan,88,High,Paracetamol,Ibuprofen,0
+36.3,Normal,6,Male,19.8,No,No,Yes,Yes,No,No,Yes,53.6,155,Sedentary,Vegetarian,77,Normal,,Ibuprofen,2
+39.1,High Fever,84,Male,33.1,Yes,Yes,Yes,Yes,No,No,No,38.2,23,Active,Vegetarian,84,Low,Aspirin,Ibuprofen,0
+36.7,Normal,37,Female,22.8,Yes,Yes,No,No,Yes,No,No,77.0,18,Moderate,Vegan,86,High,Ibuprofen,Ibuprofen,2
+36.4,Normal,17,Female,27.1,No,No,Yes,No,Yes,No,No,50.9,125,Moderate,Non-Vegetarian,76,High,Paracetamol,Ibuprofen,2
+38.7,High Fever,7,Female,29.4,Yes,No,Yes,No,No,Yes,Yes,64.3,155,Moderate,Non-Vegetarian,67,Normal,Aspirin,Ibuprofen,0
+37.2,Normal,52,Female,32.5,No,No,No,Yes,No,Yes,Yes,75.8,2,Moderate,Vegan,97,High,Ibuprofen,Ibuprofen,2
+39.9,High Fever,20,Male,34.7,Yes,No,Yes,Yes,No,No,Yes,73.2,48,Moderate,Vegetarian,90,Normal,Aspirin,Ibuprofen,0
+36.5,Normal,88,Male,26.3,Yes,No,Yes,No,Yes,Yes,No,80.0,448,Active,Non-Vegetarian,81,Normal,Paracetamol,Ibuprofen,2
+38.7,High Fever,26,Female,29.5,No,Yes,Yes,No,No,No,Yes,75.6,442,Moderate,Vegan,63,High,Ibuprofen,Ibuprofen,0
+38.1,High Fever,22,Female,32.5,No,No,Yes,No,No,No,No,74.5,206,Active,Vegetarian,76,Normal,Aspirin,Ibuprofen,0
+37.4,Mild Fever,2,Male,29.0,No,No,No,Yes,No,Yes,No,35.6,216,Moderate,Non-Vegetarian,97,High,Ibuprofen,Paracetamol,1
+38.0,Mild Fever,33,Male,26.4,Yes,No,Yes,No,No,No,No,47.4,341,Moderate,Non-Vegetarian,67,Normal,Ibuprofen,Paracetamol,1
+38.8,High Fever,75,Female,25.3,No,No,Yes,Yes,Yes,No,No,39.1,86,Moderate,Vegetarian,73,Normal,Ibuprofen,Ibuprofen,0
+38.8,High Fever,50,Male,26.5,No,Yes,No,Yes,No,No,Yes,63.2,162,Sedentary,Vegetarian,71,Normal,Paracetamol,Ibuprofen,0
+37.9,Mild Fever,65,Female,33.6,Yes,Yes,No,Yes,Yes,No,No,34.9,431,Sedentary,Vegetarian,65,High,Paracetamol,Paracetamol,1
+38.0,Mild Fever,6,Male,34.6,No,Yes,No,Yes,No,No,No,63.2,117,Moderate,Vegetarian,76,High,Ibuprofen,Paracetamol,1
+36.2,Normal,43,Male,34.1,Yes,Yes,Yes,Yes,Yes,No,No,85.8,1,Moderate,Non-Vegetarian,86,Normal,Paracetamol,Ibuprofen,2
+39.0,High Fever,34,Female,29.3,No,Yes,No,Yes,Yes,Yes,Yes,32.9,143,Sedentary,Vegan,73,Low,Paracetamol,Ibuprofen,0
+39.2,High Fever,64,Male,31.7,No,No,No,No,Yes,No,Yes,53.5,344,Sedentary,Vegetarian,99,Low,Ibuprofen,Ibuprofen,0
+39.6,High Fever,79,Female,26.8,Yes,No,No,No,Yes,Yes,Yes,55.1,275,Sedentary,Vegetarian,80,Low,Paracetamol,Ibuprofen,0
+36.5,Normal,50,Female,19.0,No,Yes,Yes,Yes,No,No,No,61.5,428,Moderate,Vegetarian,91,Normal,Aspirin,Ibuprofen,2
+39.2,High Fever,45,Male,22.8,Yes,No,Yes,No,Yes,Yes,Yes,56.6,187,Sedentary,Vegan,98,High,Ibuprofen,Ibuprofen,0
+37.9,Mild Fever,31,Female,34.9,No,No,No,No,Yes,No,Yes,84.1,201,Sedentary,Vegan,98,High,Aspirin,Paracetamol,1
+37.0,Normal,49,Female,19.6,Yes,No,Yes,Yes,No,No,Yes,83.6,486,Moderate,Vegetarian,91,Low,Ibuprofen,Ibuprofen,2
