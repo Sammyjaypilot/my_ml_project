@@ -82,17 +82,17 @@ class ModelInfo(BaseModel):
 
 @app.get("/")
 async def root():
-    return {{"message": "FeverSeverity Prediction API v2.0", "status": "operational"}}
+    return {"message": "FeverSeverity Prediction API v2.0", "status": "operational"}
 
 
 
 @app.get("/health")
 async def health_check():
-    return {{
+    return {
         "status": "healthy",
         "model_loaded": model is not None,
-        "timestamp": datetime.now().isformat()
-    }}
+        "timestamp": datetime.now().isoformat()
+    }
 
 @app.get("/model/info", response_model=ModelInfo)
 async def get_model_information():

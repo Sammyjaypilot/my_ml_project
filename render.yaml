@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: Feverseverity-api
+    env: docker
+    plan: free
+    branch: main
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: 1
+        
+
