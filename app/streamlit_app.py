@@ -65,13 +65,22 @@ st.markdown("""
 # API Configuration 
 API_BASE_URL = "https://fever-severity-test.onrender.com"
 
+
 def check_api_health():
-    """Check if the FastAPI server is running"""
+    """Check if the FastAPI server is running AND model is loaded"""
     try:
-        response = requests.get(f"{API_BASE_URL}/health", timeout=5)
-        return response.status_code == 200
-    except requests.exceptions.RequestException:
+        response = requests.get(f"{API_BASE_URL}/health", timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            st.write(f"🔍 API Response: {data}")  # Debug info
+            return data.get("status") == "healthy" and data.get("model_loaded") == True
+        else:
+            st.write(f"❌ API returned status: {response.status_code}")
+            return False
+    except Exception as e:
+        st.write(f"🚨 API Connection failed: {e}")
         return False
+    
     
     
 def predict_with_api(patient_data):
