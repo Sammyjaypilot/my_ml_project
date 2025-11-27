@@ -67,21 +67,36 @@ API_BASE_URL = "https://fever-severity-test.onrender.com"
 
 
 def check_api_health():
-    """Check if the FastAPI server is running AND model is loaded"""
+    """Check if the FastAPI server is running AND model is loaded - WITH DEBUG"""
     try:
+        st.sidebar.markdown("---")
+        st.sidebar.subheader("🔧 Debug Info")
+        
+        st.sidebar.write(f"🔗 Testing URL: {API_BASE_URL}/health")
+        
         response = requests.get(f"{API_BASE_URL}/health", timeout=10)
+        st.sidebar.write(f"📡 HTTP Status: {response.status_code}")
+        
         if response.status_code == 200:
             data = response.json()
-            st.write(f"🔍 API Response: {data}")  # Debug info
-            return data.get("status") == "healthy" and data.get("model_loaded") == True
+            st.sidebar.write(f"📊 API Response: {data}")
+            
+            status_ok = data.get("status") == "healthy"
+            model_loaded = data.get("model_loaded") == True
+            
+            st.sidebar.write(f"✅ Status healthy: {status_ok}")
+            st.sidebar.write(f"🤖 Model loaded: {model_loaded}")
+            
+            return status_ok and model_loaded
         else:
-            st.write(f"❌ API returned status: {response.status_code}")
+            st.sidebar.error(f"❌ HTTP Error: {response.status_code}")
+            st.sidebar.write(f"Response text: {response.text}")
             return False
+            
     except Exception as e:
-        st.write(f"🚨 API Connection failed: {e}")
+        st.sidebar.error(f"🚨 Connection Failed: {str(e)}")
         return False
-    
-    
+
     
 def predict_with_api(patient_data):
     """Send prediction request to FastAPI"""
