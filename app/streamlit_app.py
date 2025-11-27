@@ -402,4 +402,4 @@ def main():
     st.caption(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Fever Severity Assessment Tool")
 
 if __name__ == "__main__":
-    main()
+    main()# DEPLOYMENT MARKER - API URL: https://fever-severity-test.onrender.com
