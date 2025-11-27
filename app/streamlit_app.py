@@ -73,15 +73,6 @@ def check_api_health():
     except requests.exceptions.RequestException:
         return False
     
-def get_model_info():
-    """Get model information from API"""
-    try:
-        response = requests.get(f"{API_BASE_URL}/model/info", timeout=5)
-        if response.status_code == 200:
-            return response.json()
-        return None
-    except requests.exceptions.RequestException:
-        return None
     
 def predict_with_api(patient_data):
     """Send prediction request to FastAPI"""
@@ -110,7 +101,6 @@ def main():
 
     # API Status Check
     api_healthy = check_api_health()
-    model_info = get_model_info() if api_healthy else None
 
     # Display API status
     col1, col2, col3 = st.columns(3)
@@ -120,13 +110,7 @@ def main():
         else:
             st.error("❌ API Disconnected")
 
-    with col2:
-        if model_info:
-            st.info(f"🤖 Model: {model_info.get('model_type', 'Unknown')}")
 
-    with col3:
-        if model_info:
-            st.info(f"📊 Version: {model_info.get('version', 'Unknown')}")
 
     if not api_healthy:
         st.warning("""
