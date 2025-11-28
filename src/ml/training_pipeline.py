@@ -1,12 +1,19 @@
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+    confusion_matrix,
+)
 import pandas as pd
 import numpy as np
 import json
 import os
 import yaml
 import logging
-from datetime import datetime 
+from datetime import datetime
 import mlflow
 import joblib  # Add this for model saving
 from pathlib import Path
@@ -29,6 +36,7 @@ from mlflow.tracking import MlflowClient
 
 logger = logging.getLogger(__name__)
 
+
 def filter_valid_params(estimator_class, params):
     """Keep only parameters that are valid for this sklearn estimator."""
     if not params:
@@ -40,8 +48,16 @@ def filter_valid_params(estimator_class, params):
         print(f"⚠️ filter_valid_params error: {e}")
         return {}
 
+
 class TrainingPipeline:
-    def __init__(self, preprocessor, model_type=None, random_state=None, model_params=None, params_yaml_path=None):
+    def __init__(
+        self,
+        preprocessor,
+        model_type=None,
+        random_state=None,
+        model_params=None,
+        params_yaml_path=None,
+    ):
         """
         Simplified initialization compatible with your existing structure
         """
@@ -52,13 +68,15 @@ class TrainingPipeline:
         self.pipeline = None
         self.training_history = {}
         self.evaluation_results = {}
-        
+
         # Use your existing params.yaml path
-        self.params_yaml_path = Path("C:/Users/DELL/Desktop/my_ml_project/notebook/params.yaml")
-        
+        self.params_yaml_path = Path(
+            "C:/Users/DELL/Desktop/my_ml_project/notebook/params.yaml"
+        )
+
         # Load parameters from your existing params.yaml
         self._load_parameters()
-        
+
         # MLflow setup
         try:
             mlflow.sklearn.autolog(disable=True)
@@ -70,23 +88,25 @@ class TrainingPipeline:
         try:
             if self.params_yaml_path.exists():
                 params = load_params(self.params_yaml_path)
-                model_cfg = params.get('model', {})
-                
+                model_cfg = params.get("model", {})
+
                 # Set model_type if not provided
                 if self.model_type is None:
-                    self.model_type = model_cfg.get('model_type', 'random_forest')
-                
+                    self.model_type = model_cfg.get("model_type", "random_forest")
+
                 # Set random_state if not provided
                 if self.random_state is None:
-                    self.random_state = model_cfg.get('random_state', 42)
-                
+                    self.random_state = model_cfg.get("random_state", 42)
+
                 # Load model-specific parameters
                 if not self.model_params:
                     if self.model_type in model_cfg:
                         self.model_params = model_cfg.get(self.model_type, {})
-                    
-                print(f"✅ Loaded parameters for {self.model_type}: {list(self.model_params.keys())}")
-                
+
+                print(
+                    f"✅ Loaded parameters for {self.model_type}: {list(self.model_params.keys())}"
+                )
+
         except Exception as e:
             logger.warning(f"Could not read params.yaml: {e}. Using provided defaults.")
 
@@ -94,7 +114,7 @@ class TrainingPipeline:
         """Create sklearn pipeline with the specified model"""
         if self.model_type is None:
             raise ValueError("model_type must be specified")
-        
+
         # Map model types to classifier classes
         MODEL_MAP = {
             "random_forest": RandomForestClassifier,
@@ -102,29 +122,28 @@ class TrainingPipeline:
             "xgboost": XGBClassifier,
             "svm": SVC,
             "knn": KNeighborsClassifier,
-            "decision_tree": DecisionTreeClassifier
+            "decision_tree": DecisionTreeClassifier,
         }
-        
+
         if self.model_type not in MODEL_MAP:
             raise ValueError(f"Unsupported model_type: {self.model_type}")
-        
+
         # Filter valid parameters
         classifier_class = MODEL_MAP[self.model_type]
         valid_params = filter_valid_params(classifier_class, self.model_params)
-        
+
         # Add random_state if the classifier supports it
-        if 'random_state' in classifier_class().get_params():
-            valid_params['random_state'] = self.random_state
-        
+        if "random_state" in classifier_class().get_params():
+            valid_params["random_state"] = self.random_state
+
         # Create classifier
         classifier = classifier_class(**valid_params)
-        
+
         # Create pipeline
-        self.pipeline = Pipeline(steps=[
-            ("preprocessor", self.preprocessor),
-            ("classifier", classifier)
-        ])
-        
+        self.pipeline = Pipeline(
+            steps=[("preprocessor", self.preprocessor), ("classifier", classifier)]
+        )
+
         print(f"✅ Created pipeline with {self.model_type} classifier")
 
     def fit(self, X, y, experiment_name="FeverSeverity_Prediction", run_name=None):
@@ -137,7 +156,9 @@ class TrainingPipeline:
         mlflow.set_experiment(experiment_name)
 
         if run_name is None:
-            run_name = f"{self.model_type}_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            run_name = (
+                f"{self.model_type}_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            )
 
         start_time = datetime.now()
         with mlflow.start_run(run_name=run_name) as run:
@@ -156,14 +177,16 @@ class TrainingPipeline:
             training_time = (datetime.now() - start_time).total_seconds()
 
             # Store training history
-            self.training_history.update({
-                "training_time_seconds": training_time,
-                "training_samples": len(X),
-                "features_count": X.shape[1],
-                "model_type": self.model_type,
-                "random_state": self.random_state,
-                "training_timestamp": datetime.now().isoformat()
-            })
+            self.training_history.update(
+                {
+                    "training_time_seconds": training_time,
+                    "training_samples": len(X),
+                    "features_count": X.shape[1],
+                    "model_type": self.model_type,
+                    "random_state": self.random_state,
+                    "training_timestamp": datetime.now().isoformat(),
+                }
+            )
 
             # Log to MLflow
             mlflow.log_metric("training_time", training_time)
@@ -179,13 +202,13 @@ class TrainingPipeline:
         if self.pipeline is None:
             raise ValueError("Model must be trained first")
         return self.pipeline.predict(X)
-    
+
     def predict_proba(self, X):
         if self.pipeline is None:
             raise ValueError("Model must be trained first")
         return self.pipeline.predict_proba(X)
 
-    def evaluate(self, X, y, dataset_name='validation'):
+    def evaluate(self, X, y, dataset_name="validation"):
         # ... [keep your existing evaluate method] ...
         pass
 
@@ -201,7 +224,7 @@ class TrainingPipeline:
         """Save the trained pipeline using joblib"""
         if self.pipeline is None:
             raise ValueError("No trained model to save")
-        
+
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         joblib.dump(self.pipeline, filepath)
         print(f"✅ Model saved to {filepath}")
@@ -230,9 +253,7 @@ class TrainingPipeline:
                 print(f"📝 Using existing registered model: {model_name}")
 
             model_version = client.create_model_version(
-                name=model_name,
-                source=model_uri,
-                run_id=run_id
+                name=model_name, source=model_uri, run_id=run_id
             )
 
             print(f"📦 Model version {model_version.version} registered")
@@ -241,7 +262,7 @@ class TrainingPipeline:
                 client.transition_model_version_stage(
                     name=model_name,
                     version=model_version.version,
-                    stage=transition_to_stage
+                    stage=transition_to_stage,
                 )
                 print(f"🚀 Transitioned to {transition_to_stage}")
 
@@ -250,5 +271,3 @@ class TrainingPipeline:
             print(f"❌ Model registration failed: {e}")
             # Don't re-raise the exception, just log it and continue
             return None
-        
-        
