@@ -4,7 +4,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 def test_health_check():
     """Basic test to verify CI/CD is working"""
+<<<<<<< HEAD
     assert 1 + 1 == 2 #correct basic test
+=======
+    assert 1 + 1 == 2
+>>>>>>> 0ae4d27168ae9341104d69a93e9505cde86d9387
 
 def test_imports():
     """Test that main modules can be imported"""
