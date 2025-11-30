@@ -1,4 +1,3 @@
-# experiment_tracker.py (FIXED IMPORTS)
 import mlflow
 import pandas as pd
 from pathlib import Path
@@ -47,9 +46,7 @@ def run_experiments():
 
     # 1. Load parameters and get experiment name from CORRECT location
     params = load_params()
-    experiment_name = params.get("training", {}).get(
-        "experiment_name", "FeverSeverity_Prediction"
-    )
+    experiment_name = "FeverSeverity_AllModels_Experiment"
     model_config = params.get("model", {})
 
     print(f"🔬 Using experiment name: '{experiment_name}'")
@@ -95,9 +92,9 @@ def run_experiments():
     successful_models = []
 
     for model_type in model_types:
-        print(f"\n{'='*50}")
+        print(f"\n{'=' * 50}")
         print(f"🏃 Training {model_type}...")
-        print(f"{'='*50}")
+        print(f"{'=' * 50}")
         try:
             model_params = model_config.get(model_type, {})
             filtered_params = filter_valid_params(
@@ -145,3 +142,4 @@ def run_experiments():
 
 if __name__ == "__main__":
     run_experiments()
+

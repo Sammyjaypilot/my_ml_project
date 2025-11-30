@@ -6,9 +6,131 @@ from datetime import datetime
 import requests
 import sys
 import os
+import json
+from fastapi import Response
+from src.monitoring.monitor import ModelMonitor, PREDICTION_COUNTER, PREDICTION_LATENCY, ERROR_COUNTER, ACTIVE_REQUESTS
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+import time
+from datetime import datetime
+from api.main import app
+from api.main import model, PatientData, logging, HTTPException
+
+
 
 # Add project root to path to import ml modules
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+# Initialize monitor after your existing imports
+monitor = ModelMonitor()
+
+# Add metrics endpoint for Prometheus (Grafana data source)
+@app.get("/metrics")
+async def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+# Enhanced health endpoint with Grafana-friendly metrics
+import psutil
+@app.get("/render-health")
+async def render_health():
+    """"Enhanced health check for Render monitoring"""
+    health_info = {{
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "service": "fever-monitoring-api",
+        "model_version": "v20",
+        "model_path" : "models/production/current",
+        "monitoring": "enabled",
+        "grafana_ready": True,
+        "checks": {{
+            "model_loaded": model is None,
+            "memory_usage_mb": psutil.Process().memory_info().rss / 1024 / 1024,
+            "mlflow_available": os.path.exists("mlruns"),
+            "current_model": os.path.exists("models/production/current")
+
+        }}
+    }}
+    return health_info
+
+# Add monitoring to your existing predict endpoint
+@app.post("/predict")
+async def predict(features: PatientData):
+    ACTIVE_REQUESTS.inc()
+    start_time = time.time()
+
+    try:
+        # Add existing prediction logic here
+        prediction = model.predict([
+            features.temperature,
+            features.age,
+            features.bmi,
+            features.humidity,      
+            features.aqi,
+            features.heart_rate,
+            features.gender,
+            features.headache,
+            features.body_ache,
+            features.fatigue,
+            features.chronic_conditions,
+            features.allergies,
+            features.smoking_history,
+            features.alcohol_consumption,
+            features.physical_activity,
+            features.diet_type,
+            features.blood_pressure,
+            features.previous_medication,
+            features.recommended_medication
+
+        ])
+
+        probability = model.predict_proba([
+            features.temperature,
+            features.age,
+            features.bmi,
+            features.humidity,      
+            features.aqi,
+            features.heart_rate,
+            features.gender,
+            features.headache,
+            features.body_ache,
+            features.fatigue,
+            features.chronic_conditions,
+            features.allergies,
+            features.smoking_history,
+            features.alcohol_consumption,
+            features.physical_activity,
+            features.diet_type,
+            features.blood_pressure,
+            features.previous_medication,
+            features.recommended_medication
+        ])
+
+        latency = time.time() - start_time
+
+        # Log prediction for monitoring
+        monitor.log_prediction(
+            features=features.dict(),
+            prediction=prediction[0],
+            latency=latency
+        )
+
+        ACTIVE_REQUESTS.dec()
+        return {{
+            "prediction": int(prediction[0]),
+            "probability": float(probability[0][1]),
+            "latency_ms": round(latency * 1000, 2),
+            "model_version": "v20"
+        }}
+    
+    except Exception as e:
+        ERROR_COUNTER.inc()
+        ACTIVE_REQUESTS.dec()
+        logging.error(f"Prediction error: {{str(e)}}")
+        raise HTTPException(status_code=500, detail="Prediction failed")
+
+
+
+
+
 
 # Page Configuration
 st.set_page_config(

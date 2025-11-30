@@ -9,11 +9,12 @@ from sklearn.preprocessing import (
     OneHotEncoder,
     MinMaxScaler,
     RobustScaler,
+    LabelEncoder,
 )
-from sklearn.feature_selection import SelectPercentile, chi2
 import os
 import yaml
 from pathlib import Path
+import json
 
 
 def load_params(
@@ -42,7 +43,6 @@ def get_data_preprocessor(numerical_cols, categorical_cols):
         steps=[
             ("imputer", SimpleImputer(strategy="most_frequent")),
             ("encoder", OneHotEncoder(handle_unknown="ignore")),
-            # ('selector', SelectPercentile(chi2, percentile=50))
         ]
     )
     preprocessor = ColumnTransformer(
@@ -76,24 +76,12 @@ class DataProcessor:
     def split_data(self, df_fever, save_path=None, generate_metrics=True):
         """
         Split data into train, validation, and test sets
-
-        Args:
-            data (pd.DataFrame): Raw data
-            save_path (str): Path to save processed data (optional)
-            generate_metrics (bool): Whether to generate data metrics
-
-        Returns:
-            tuple: (X_train, X_val, X_test, y_train, y_val, y_test)
         """
-
         if self.target_column not in df_fever.columns:
-            # --- Automatically encode Fever_Severity to numeric ---
             if (
                 "Fever_Severity" in df_fever.columns
                 and "Fever_Severity_code" not in df_fever.columns
             ):
-                from sklearn.preprocessing import LabelEncoder
-
                 le = LabelEncoder()
                 df_fever["Fever_Severity_code"] = le.fit_transform(
                     df_fever["Fever_Severity"]
@@ -109,12 +97,12 @@ class DataProcessor:
         X = df_fever.drop(columns=[self.target_column])
         y = df_fever[self.target_column]
 
-        # separate test set
+        # Separate test set
         X_temp, X_test, y_temp, y_test = train_test_split(
             X, y, test_size=self.test_size, random_state=self.random_state, stratify=y
         )
 
-        # separate validation set from temporary set
+        # Separate validation set from temporary set
         val_size_adjusted = self.val_size / (1 - self.test_size)
         X_train, X_val, y_train, y_val = train_test_split(
             X_temp,
@@ -129,18 +117,17 @@ class DataProcessor:
 
         if generate_metrics:
             self._generate_data_metrics(
-                df_fever, X_train, X_val, X_test, y_train, y_val, y_test, save_path
+                df_fever, X_train, X_val, X_test, y_train, y_val, y_test
             )
 
         return X_train, X_val, X_test, y_train, y_val, y_test
 
     def _save_splits(
-        self, X_train, X_val, X_test, y_train, y_val, y_test, save_path, verbose=False
+        self, X_train, X_val, X_test, y_train, y_val, y_test, save_path, verbose=True
     ):
         """
         Save train, validation, and test splits to CSV files
         """
-        # create directory if it doesn't exist
         os.makedirs(save_path, exist_ok=True)
 
         # Combine features and targets for each split
@@ -164,22 +151,13 @@ class DataProcessor:
             print(f"   Test set: {len(test_data)} samples")
 
     def _generate_data_metrics(
-        self,
-        df_fever,
-        X_train,
-        X_val,
-        X_test,
-        y_train,
-        y_val,
-        y_test,
-        save_metrics=True,
+        self, df_fever, X_train, X_val, X_test, y_train, y_val, y_test
     ):
         """Generate comprehensive data metrics"""
-
         metrics = {
             "dataset": {
                 "total_samples": len(df_fever),
-                "total_features": df_fever.shape[1] - 1,  # excluding target
+                "total_features": df_fever.shape[1] - 1,
                 "missing_values_total": df_fever.isnull().sum().sum(),
                 "missing_values_percentage": (
                     df_fever.isnull().sum().sum()
@@ -215,139 +193,51 @@ class DataProcessor:
                     "class_1_percentage": float((y_test == 1).mean() * 100),
                 },
             },
-            "feature_statistics": {
-                "numerical_features": [
-                    "Temperature",
-                    "Age",
-                    "BMI",
-                    "Humidity",
-                    "AQI",
-                    "Heart_Rate",
-                ],
-                "categorical_features": [
-                    "Gender",
-                    "Headache",
-                    "Body_Ache",
-                    "Fatigue",
-                    "Chronic_Conditions",
-                    "Allergies",
-                    "Smoking_History",
-                    "Alcohol_Consumption",
-                    "Physical_Activity",
-                    "Diet_Type",
-                    "Blood_Pressure",
-                    "Previous_Medication",
-                    "Recommended_Medication",
-                ],
-                "target_variable": "Fever_Severity_code",
-            },
             "data_quality": {
-                # Within 20% of balanced
                 "is_balanced": abs((y_train == 1).mean() - 0.5) < 0.2,
                 "has_missing_values": df_fever.isnull().sum().sum() > 0,
-                # ~70% train
                 "split_ratios_correct": abs(len(X_train) / len(df_fever) - 0.7) < 0.1,
             },
         }
-        if save_metrics:
-            self._save_data_metrics(metrics, filepath="reports/data_metrics.json")
 
+        self._save_data_metrics(metrics)
         return metrics
 
-    def _save_data_metrics(self, metrics, filepath="reports/data_metrics.json"):
+    def _save_data_metrics(
+        self,
+        metrics,
+        filepath="C:/Users/DELL/Desktop/my_ml_project/metrics/metrics.json",
+    ):
         """Save data metrics to JSON file"""
-        import json
-        import os
-
-        # Create reports directory if it doesn't exist
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
-
         with open(filepath, "w") as f:
             json.dump(metrics, f, indent=2, default=str)
-
         print(f"✅ Data metrics saved to {filepath}")
 
-    def create_preprocessor(
-        self,
-        numerical_cols=None,
-        categorical_cols=None,
-        numerical_imputer=None,
-        numerical_scaler=None,
-        categorical_imputer=None,
-        categorical_encoder=None,
-        handle_unknown=None,
-    ):
+    def create_preprocessor(self):
         """
         Create preprocessing pipeline using parameters from params.yaml
         """
-        current_file = Path(__file__)
-        params_file_path = (
-            current_file.parent.parent.parent / "notebook" / "params.yaml"
-        )
-        print(
-            f"DEBUG: Attempting to open file at: {params_file_path}"
-        )  # Verify path one last time
+        # Load parameters
+        params = load_params()
 
-        # Load default parameters from params.yaml if not provided
-        try:
-            with open(params_file_path, "r") as f:
-                params = yaml.safe_load(f)
-            preprocessing_params = params["preprocessing"]
+        # Get preprocessing parameters with defaults
+        preprocessing_params = params.get("preprocessing", {})
+        numerical_params = preprocessing_params.get("numerical", {})
+        categorical_params = preprocessing_params.get("categorical", {})
 
-            numerical_imputer = (
-                numerical_imputer or preprocessing_params["numerical"]["imputer"]
-            )
-            numerical_scaler = (
-                numerical_scaler or preprocessing_params["numerical"]["scaler"]
-            )
-            categorical_imputer = (
-                categorical_imputer or preprocessing_params["categorical"]["imputer"]
-            )
-            categorical_encoder = (
-                categorical_encoder or preprocessing_params["categorical"]["encoder"]
-            )
-            handle_unknown = (
-                handle_unknown or preprocessing_params["categorical"]["handle_unknown"]
-            )
-            numerical_cols = params.get("prepare", {}).get(
-                "numerical_cols",
-                ["Temperature", "Age", "BMI", "Humidity", "AQI", "Heart_Rate"],
-            )
-            categorical_cols = params.get("prepare", {}).get(
-                "categorical_cols",
-                [
-                    "Gender",
-                    "Headache",
-                    "Body_Ache",
-                    "Fatigue",
-                    "Chronic_Conditions",
-                    "Allergies",
-                    "Smoking_History",
-                    "Alcohol_Consumption",
-                    "Physical_Activity",
-                    "Diet_Type",
-                    "Blood_Pressure",
-                    "Previous_Medication",
-                    "Recommended_Medication",
-                ],
-            )
-        except Exception as e:
-            print(f"⚠️  Could not load params.yaml: {e}. Using defaults.")
-            numerical_imputer = numerical_imputer or "median"
-            numerical_scaler = numerical_scaler or "standard"
-            categorical_imputer = categorical_imputer or "most_frequent"
-            categorical_encoder = categorical_encoder or "onehot"
-            handle_unknown = handle_unknown or "ignore"
+        # Numerical transformer
+        numerical_imputer = numerical_params.get("imputer", "median")
+        numerical_scaler_type = numerical_params.get("scaler", "standard")
 
-        # Create numerical transformer based on parameters
-        if numerical_scaler == "standard":
+        if numerical_scaler_type == "standard":
             scaler = StandardScaler()
-        elif numerical_scaler == "minmax":
+        elif numerical_scaler_type == "minmax":
             scaler = MinMaxScaler()
-        elif numerical_scaler == "robust":
+        elif numerical_scaler_type == "robust":
             scaler = RobustScaler()
         else:
-            print(f"⚠️  Unknown scaler: {numerical_scaler}. Using StandardScaler.")
+            print(f"⚠️  Unknown scaler: {numerical_scaler_type}. Using StandardScaler.")
             scaler = StandardScaler()
 
         numerical_transformer = Pipeline(
@@ -357,7 +247,10 @@ class DataProcessor:
             ]
         )
 
-        # Create categorical transformer
+        # Categorical transformer
+        categorical_imputer = categorical_params.get("imputer", "most_frequent")
+        handle_unknown = categorical_params.get("handle_unknown", "ignore")
+
         categorical_transformer = Pipeline(
             steps=[
                 ("imputer", SimpleImputer(strategy=categorical_imputer)),
@@ -368,6 +261,31 @@ class DataProcessor:
             ]
         )
 
+        # Get feature columns
+        prepare_params = params.get("prepare", {})
+        numerical_cols = prepare_params.get(
+            "numerical_cols",
+            ["Temperature", "Age", "BMI", "Humidity", "AQI", "Heart_Rate"],
+        )
+        categorical_cols = prepare_params.get(
+            "categorical_cols",
+            [
+                "Gender",
+                "Headache",
+                "Body_Ache",
+                "Fatigue",
+                "Chronic_Conditions",
+                "Allergies",
+                "Smoking_History",
+                "Alcohol_Consumption",
+                "Physical_Activity",
+                "Diet_Type",
+                "Blood_Pressure",
+                "Previous_Medication",
+                "Recommended_Medication",
+            ],
+        )
+
         self.preprocessor = ColumnTransformer(
             transformers=[
                 ("num", numerical_transformer, numerical_cols),
@@ -376,10 +294,10 @@ class DataProcessor:
         )
 
         print(f"✅ Created preprocessor with:")
-        print(f"   Numerical: {numerical_imputer} imputer, {numerical_scaler} scaler")
         print(
-            f"   Categorical: {categorical_imputer} imputer, {categorical_encoder} encoder"
+            f"   Numerical: {numerical_imputer} imputer, {numerical_scaler_type} scaler"
         )
+        print(f"   Categorical: {categorical_imputer} imputer, onehot encoder")
 
         return self.preprocessor
 
@@ -387,50 +305,36 @@ class DataProcessor:
         """Get feature names after preprocessing"""
         if self.preprocessor is None:
             return None
-
-        feature_names = []
-        for name, transformer, columns in self.preprocessor.transformers_:
-            if name == "num":
-                feature_names.extend(columns)
-            elif name == "cat":
-                # Get one-hot encoded feature names
-                encoded_features = transformer.named_steps[
-                    "onehot"
-                ].get_feature_names_out(columns)
-                feature_names.extend(encoded_features)
-
-        return feature_names
+        return self.preprocessor.get_feature_names_out()
 
 
 if __name__ == "__main__":
+    # Load parameters
+    params = load_params()
 
-    # --- Helper to load params.yaml ---
-    project_root = Path("C:/Users/DELL/Desktop/my_ml_project")
-    params_path = project_root / "notebook" / "params.yaml"
+    # Get preprocess parameters (these are tracked by DVC)
+    preprocess_params = params.get("preprocess", {})
+    test_size = preprocess_params.get("test_size", 0.2)
+    val_size = preprocess_params.get("val_size", 0.1)
+    random_state = preprocess_params.get("random_state", 42)
 
-    # Load params.yaml if it exists
-    if params_path.exists():
-        with open(params_path, "r") as f:
-            params = yaml.safe_load(f)
-        print(f"✅ Loaded params.yaml from: {params_path}")
-    else:
-        print(f"⚠️ params.yaml not found at {params_path}. Using defaults.")
-        params = {}
-
-    repo_root = Path("C:/Users/DELL/Desktop/my_ml_project")
-
-    raw_path = params.get("prepare", {}).get(
-        "rawdata_file_path", str(repo_root / "notebook" / "fever.csv")
+    # Get other parameters
+    prepare_params = params.get("prepare", {})
+    raw_path = prepare_params.get(
+        "rawdata_file_path", "C:/Users/DELL/Desktop/my_ml_project/notebook/fever.csv"
     )
-    target_col = params.get("prepare", {}).get("target_column", "Fever_Severity_code")
-    test_size = params.get("preprocess", {}).get("test_size", 0.2)
-    val_size = params.get("preprocess", {}).get("val_size", 0.1)
-    random_state = params.get("preprocess", {}).get("random_state", 42)
+    target_col = prepare_params.get("target_column", "Fever_Severity_code")
 
+    print(f"Using DVC-tracked parameters:")
+    print(f"  test_size: {test_size}")
+    print(f"  val_size: {val_size}")
+    print(f"  random_state: {random_state}")
+
+    # Load data
     print(f"Loading raw data from: {raw_path}")
     df = pd.read_csv(raw_path)
 
-    # --- Instantiate DataProcessor ---
+    # Initialize DataProcessor with DVC-tracked parameters
     dp = DataProcessor(
         target_column=target_col,
         test_size=test_size,
@@ -438,20 +342,12 @@ if __name__ == "__main__":
         random_state=random_state,
     )
 
-    # --- Build preprocessor ---
-    try:
-        dp.create_preprocessor()
-    except Exception as e:
-        print(
-            f"⚠️ create_preprocessor() raised an exception: {e}. Continuing with defaults."
-        )
+    # Create preprocessor
+    dp.create_preprocessor()
 
-    # --- Save splits and generate metrics ---
-    save_dir = repo_root / "data" / "processed"
-    dp.split_data(df, save_path=str(save_dir), generate_metrics=True)
+    # Process and save data
+    save_dir = "C:/Users/DELL/Desktop/my_ml_project/data/processed"
+    dp.split_data(df, save_path=save_dir, generate_metrics=True)
 
-    metrics_path = repo_root / "metrics" / "metrics.json"
-
-    print("✅ Preprocessing completed.")
-    print(f"Processed data files saved to: {save_dir}")
-    print(f"Metrics saved to: {metrics_path}")
+    print("✅ Preprocessing completed successfully!")
+    print(f"Processed data saved to: {save_dir}")
