@@ -4,14 +4,15 @@ import logging
 from datetime import datetime
 import prometheus_client as prom
 from prometheus_client import Counter, Histogram, Gauge
-import os 
+import os
 
 # Initialize Prometheus metrics for Grafana
-PREDICTION_COUNTER = Counter('model_predictions_total', 'Total predictions made')
-PREDICTION_LATENCY = Histogram('model_prediction_latency_seconds', 'Prediction latency')
-MODEL_ACCURACY = Gauge('model_accuracy', 'Current model accuracy')
-ERROR_COUNTER = Counter('model_errors_total', 'Total prediction errors')
-ACTIVE_REQUESTS = Gauge('active_requests', 'Currently active requests')
+PREDICTION_COUNTER = Counter("model_predictions_total", "Total predictions made")
+PREDICTION_LATENCY = Histogram("model_prediction_latency_seconds", "Prediction latency")
+MODEL_ACCURACY = Gauge("model_accuracy", "Current model accuracy")
+ERROR_COUNTER = Counter("model_errors_total", "Total prediction errors")
+ACTIVE_REQUESTS = Gauge("active_requests", "Currently active requests")
+
 
 class ModelMonitor:
     def __init__(self):
@@ -38,4 +39,4 @@ class ModelMonitor:
                 MODEL_ACCURACY.set(accuracy)
 
         # Increment Prometheus counter for Grafana
-        PREDICTION_COUNTER.inc() 
+        PREDICTION_COUNTER.inc()
