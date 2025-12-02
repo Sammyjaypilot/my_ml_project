@@ -9,7 +9,7 @@ def test_health_check():
 def test_imports():
     """Test that main modules can be imported"""
     try:
-        from api.main import app
+        from src.api.main import app
         assert True
     except ImportError:
         assert False, "Failed to import main app"
