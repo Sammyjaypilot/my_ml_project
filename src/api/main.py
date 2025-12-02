@@ -16,7 +16,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from src.ml.model_loader import load_production_model, get_model_info
 
-from .models import PatientData, PredictionResponse, HealthResponse, APIResponse
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -272,8 +271,6 @@ async def get_patient_risk(
 
     except Exception as e:
         print(f"❌ Error in patient risk endpoint: {e}")
-        import traceback
-
         traceback.print_exc()
         raise HTTPException(
             status_code=500, detail=f"Patient risk assessment failed: {str(e)}"
