@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
+
 # Request model for prediction endpoint
 class PatientData(BaseModel):
     temperature: float = Field(example=38.5)
@@ -41,6 +42,3 @@ class HealthResponse(BaseModel):
 class APIResponse(BaseModel):
     message: str = Field(example="FeverSeverity Prediction API is running")
     status: str = Field(default="success", example="success")
-
-
-    
