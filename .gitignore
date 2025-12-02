@@ -9,3 +9,8 @@ notebook/models_chpt/
 fever output.png
 
 /reports
+__pycache__/
+*.pyc
+mlruns/
+.venv/
+venv/
